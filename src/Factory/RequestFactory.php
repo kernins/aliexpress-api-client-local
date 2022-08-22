@@ -103,16 +103,27 @@ class RequestFactory implements LocalRequestFactoryInterface
         BaseRequest $request,
         AppDataInterface $appData
     ): RequestInterface {
-        $postData = $this->serializer->serialize($request, 'json');
-
         try {
-            return $this->requestFactory
-                ->createRequest(
-                    'POST',
-                    $this->uriFactory->createUri($appData->getBaseUrl() . $request->getMethod())
-                )->withBody($this->streamFactory->createStream($postData))
-                ->withHeader('content-type', 'application/json; charset=UTF-8')
-                ->withHeader('x-auth-token', $appData->getToken());
+            switch($request->getHTTPMethod())
+               {
+                  case 'GET':
+                     $query = $this->serializer->toArray($request);
+                     $req = $this->requestFactory->createRequest(
+                        'GET',
+                        $this->uriFactory->createUri(
+                           $appData->getBaseUrl().$request->getMethod().(empty($query)? '' : '?'.http_build_query($query))
+                        )
+                     );
+                     break;
+                  default:
+                     $postData = $this->serializer->serialize($request, 'json');
+                     $req = $this->requestFactory->createRequest(
+                        $request->getHTTPMethod(),
+                        $this->uriFactory->createUri($appData->getBaseUrl().$request->getMethod())
+                     )->withBody($this->streamFactory->createStream($postData))
+                     ->withHeader('content-type', 'application/json; charset=UTF-8');
+               }
+            return $req->withHeader('x-auth-token', $appData->getToken());
         } catch (\Exception $exception) {
             throw new FactoryException(
                 sprintf('Error building request: %s', $exception->getMessage()),

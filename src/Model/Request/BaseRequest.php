@@ -72,4 +72,9 @@ abstract class BaseRequest
      * @return string
      */
     abstract public function getExpectedResponse(): string;
+    
+    public function getHTTPMethod(): string
+    {
+       return 'POST';
+    }
 }
