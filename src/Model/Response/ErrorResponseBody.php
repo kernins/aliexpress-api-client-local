@@ -33,4 +33,10 @@ class ErrorResponseBody
      * @JMS\SerializedName("message")
      */
     public $message;
+    
+    
+    public function __toString(): string
+    {
+       return $this->code.': '.$this->message;
+    }
 }

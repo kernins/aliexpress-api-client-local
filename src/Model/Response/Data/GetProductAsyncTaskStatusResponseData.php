@@ -1,7 +1,7 @@
 <?php
 
 namespace Simla\Model\Response\Data;
-use Simla\Model\Enum;
+use Simla\Model\Response\ErrorResponseBody, Simla\Model\Enum;
 
 use JMS\Serializer\Annotation as JMS;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -59,9 +59,9 @@ class GetProductAsyncTaskStatusResponseData
     public $skuCodes;
     
     /**
-     * @var string|null $error
+     * @var ?ErrorResponseBody $error
      *
-     * @JMS\Type("string")
+     * @JMS\Type("Simla\Model\Response\ErrorResponseBody")
      * @JMS\SerializedName("error")
      */
     public $error;
