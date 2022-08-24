@@ -259,6 +259,10 @@ class ProductDto
     
     public function setMainImages(array $images): self
     {
+       if(($cnt=count($images)) > 6) throw new \OutOfRangeException(
+          'AE allows 6 images at most, '.$cnt.' given'
+       );
+       
        $this->images = $images;
        return $this;
     }
