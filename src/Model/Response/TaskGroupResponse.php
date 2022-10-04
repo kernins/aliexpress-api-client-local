@@ -11,7 +11,7 @@ use Simla\Model\Entity\TaskResultDto;
  * @category TaskGroupResponse
  * @package  Simla\Model\Response
  */
-class TaskGroupResponse extends BaseResponse
+class TaskGroupResponse extends BaseResponse implements \Countable
 {
     /**
      * @var int $groupId
@@ -39,6 +39,17 @@ class TaskGroupResponse extends BaseResponse
        return empty($this->results)? false : true;
     }
     
+    public function getStatCnt(): array
+    {
+       $cntSucc = $cntFail = 0;
+       foreach($this->results as $r)
+          {
+            if($r->success) $cntSucc++;
+            else $cntFail++;
+          }
+       return [$cntSucc, $cntFail];
+    }
+    
     public function getAllErrors(): array
     {
        $errs = [];
@@ -48,5 +59,10 @@ class TaskGroupResponse extends BaseResponse
             $errs = array_merge($errs, $r->errors);
           }
        return $errs;
+    }
+    
+    public function count(): int  
+    {
+       return empty($this->results)? 0 : count($this->results);
     }
 }

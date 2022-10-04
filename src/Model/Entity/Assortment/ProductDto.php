@@ -57,4 +57,9 @@ class ProductDto
     {
        return reset($this->skuInfos);
     }
+    
+    public function getSkuCode(): string
+    {
+       return $this->getFirstSku()->skuCode;
+    }
 }

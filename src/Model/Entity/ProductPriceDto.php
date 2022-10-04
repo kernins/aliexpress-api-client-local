@@ -37,6 +37,14 @@ class ProductPriceDto
        return $inst;
     }
     
+    public static function newInstanceSingleSku(int $prodId, string $skuCode, float $price, ?float $priceDiscount=null): self
+    {
+       return self::newInstance(
+          $prodId,
+          ProductSkuPriceDto::newInstance($skuCode, $price, $priceDiscount)
+       );
+    }
+    
     
     public function addSkuPrice(ProductSkuPriceDto $skuPrice): self
     {

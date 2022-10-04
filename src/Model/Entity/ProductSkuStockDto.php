@@ -33,7 +33,7 @@ class ProductSkuStockDto
     {
        $inst = new static;
        $inst->skuCode = $skuCode;
-       $inst->stock = $stock;
+       $inst->stock = max(0, $stock);
        return $inst;
     }
 }

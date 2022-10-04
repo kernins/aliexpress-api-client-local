@@ -37,6 +37,14 @@ class ProductStockDto
        return $inst;
     }
     
+    public static function newInstanceSingleSku(int $prodId, string $skuCode, int $stock): self
+    {
+       return self::newInstance(
+          $prodId,
+          ProductSkuStockDto::newInstance($skuCode, $stock)
+       );
+    }
+    
     
     public function addSkuStock(ProductSkuStockDto $skuStock): self
     {

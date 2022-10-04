@@ -11,7 +11,7 @@ use Simla\Model\Entity\Assortment\ProductDto;
  * @category GetProductListResponse
  * @package  Simla\Model\Response
  */
-class GetProductListResponse extends BaseResponse
+class GetProductListResponse extends BaseResponse implements \Countable
 {
     /**
      * @var ProductDto[] $products
@@ -25,5 +25,10 @@ class GetProductListResponse extends BaseResponse
     public function isEmpty(): bool
     {
        return empty($this->products);
+    }
+    
+    public function count(): int
+    {
+       return empty($this->products)? 0 : count($this->products);
     }
 }

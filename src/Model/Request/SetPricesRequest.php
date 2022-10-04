@@ -13,16 +13,26 @@ use Simla\Model\Response\TaskGroupResponse;
  * @package  Simla\Model\Request
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class SetPricesRequest extends BaseRequest
+class SetPricesRequest extends BaseRequest implements \Countable
 {
+    protected const MAX_SIZE = 1000;
+    
+   
     /**
      * @var ProductPriceDto[] $productsPrices
      *
      * @JMS\Type("array<Simla\Model\Entity\ProductPriceDto>")
      * @JMS\SerializedName("products")
      */
-    public $productsPrices;
+    public $productsPrices = [];
     
+    
+    
+    public function __construct(array $productsPrices=[])
+    {
+       parent::__construct();
+       foreach($productsPrices as $pp) $this->addProductPrice($pp);
+    }
     
     public static function newInstance(ProductPriceDto ...$productsPrices): self
     {
@@ -31,12 +41,35 @@ class SetPricesRequest extends BaseRequest
        return $inst;
     }
     
+    public static function instancesForEntries(array $entries): array
+    {
+       $instances = [];
+       foreach(empty(static::MAX_SIZE)? [$entries] : array_chunk($entries, static::MAX_SIZE) as $chunk)
+         {
+            $instances[] = new static($chunk);
+         }
+       return $instances;
+    }
+    
     
     public function addProductPrice(ProductPriceDto $prodPrice): self
     {
-        if(empty($this->productsPrices)) $this->productsPrices = [];
+        if($this->isFull()) throw new \LogicException(
+            'Collection is full: max size of '.static::MAX_SIZE.' entries reached'
+        );
+        
         $this->productsPrices[] = $prodPrice;
         return $this;
+    }
+    
+    public function isFull(): bool
+    {
+        return !empty(static::MAX_SIZE) && (count($this) >= static::MAX_SIZE);
+    }
+    
+    public function count(): int
+    {
+        return count($this->productsPrices);
     }
     
 

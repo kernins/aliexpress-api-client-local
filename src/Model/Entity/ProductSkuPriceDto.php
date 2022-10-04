@@ -39,10 +39,22 @@ class ProductSkuPriceDto
     
     public static function newInstance(string $skuCode, float $price, ?float $priceDiscount=null): self
     {
+       if($price <= 0) throw new \UnexpectedValueException(
+          'Price must be greater than zero'
+       );
+       
        $inst = new static;
        $inst->skuCode = $skuCode;
        $inst->price = $price;
-       if($priceDiscount !== null) $inst->priceDiscount = $priceDiscount;
+       
+       if($priceDiscount !== null)
+          {
+            if($priceDiscount <= 0) throw new \UnexpectedValueException(
+               'PriceDiscount must be greater than zero or null'
+            );
+            $inst->priceDiscount = $priceDiscount;
+          }
+       
        return $inst;
     }
 }
