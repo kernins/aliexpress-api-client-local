@@ -5,7 +5,7 @@ namespace Simla\Model\Response\Data;
 use JMS\Serializer\Annotation as JMS;
 use Simla\Model\Entity\OrderDto;
 
-class GetOrderListResponseData
+class GetOrderListResponseData implements \Countable
 {
     /**
      * @var string $totalCount
@@ -22,4 +22,10 @@ class GetOrderListResponseData
      * @JMS\SerializedName("orders")
      */
     public $orders;
+    
+    
+    public function count(): int
+    {
+       return empty($this->orders)? 0 : count($this->orders);
+    }
 }
