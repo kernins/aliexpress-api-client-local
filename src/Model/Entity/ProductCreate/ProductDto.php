@@ -269,10 +269,15 @@ class ProductDto
     
     public function setPackageInfo(int $lengthCm, int $widthCm, int $heightCm, float $weightKg): self
     {
+       if($lengthCm <= 0) throw new \UnexpectedValueException('Package length must be >= 1cm');
+       if($widthCm <= 0) throw new \UnexpectedValueException('Package width must be >= 1cm');
+       if($heightCm <= 0) throw new \UnexpectedValueException('Package height must be >= 1cm');
+       if($weightKg <= 0) throw new \UnexpectedValueException('Weight must be >= 0.01');
+       
        $this->pkgLengthCm = $lengthCm;
        $this->pkgWidthCm = $widthCm;
        $this->pkgHeightCm = $heightCm;
-       $this->pkgWeightKg = $weightKg;
+       $this->pkgWeightKg = max(0.01, round($weightKg, 2));
        return $this;
     }
     
