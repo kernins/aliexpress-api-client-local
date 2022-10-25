@@ -16,6 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class GetProductListRequest extends BaseRequest
 {
     /**
+     * @var GetProductListFilter $filter
+     *
+     * @JMS\Type("Simla\Model\Request\GetProductListFilter")
+     * @JMS\SerializedName("filter")
+     */
+   public $filter = null;
+   
+    /**
      * @var int $lastProdId
      *
      * @JMS\Type("int")
@@ -31,6 +39,15 @@ class GetProductListRequest extends BaseRequest
      * @Assert\NotNull()
      */
     public $limit = 50;
+    
+    
+    
+    public static function newInstance(?GetProductListFilter $filter=null): self
+    {
+        $inst = new static;
+        $inst->filter = $filter;
+        return $inst;
+    }
 
 
     public function getMethod(): string

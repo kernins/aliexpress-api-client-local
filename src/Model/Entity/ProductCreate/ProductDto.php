@@ -14,6 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class ProductDto
 {
     /**
+     * @var int $productId    For product edit req
+     *
+     * @JMS\Type("int")
+     * @JMS\SerializedName("product_id")
+     */
+    public $productId = null;
+   
+    /**
      * @var int $categoryId
      *
      * @JMS\Type("int")
@@ -22,10 +30,10 @@ class ProductDto
     public $categoryId;
     
     /**
-     * @var int $groupId   Currently ignored by AE
+     * @var int $groupId
      *
      * @JMS\Type("int")
-     * @JMS\SerializedName("group_id")
+     * @JMS\SerializedName("ae_group_id")
      */
     public $groupId;
     
@@ -225,6 +233,13 @@ class ProductDto
        if($groupId !== null) $inst->groupId = $groupId;
        
        return $inst;
+    }
+    
+    
+    public function setEditId(int $id): self
+    {
+       $this->productId = $id;
+       return $this;
     }
     
     
